@@ -1,0 +1,49 @@
+group 'joycai'
+version '0.0.3'
+
+apply plugin: 'idea'
+apply plugin: 'java'
+
+jar {
+    baseName = 'joycaiFileUtil'
+}
+
+repositories{
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies{
+
+    compile group: 'com.google.guava', name: 'guava', version: '+'
+
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '+'
+
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
+
+
+    //poi
+    def poiVer = "3.17"
+    compile("org.apache.poi:poi:$poiVer")
+    compile("org.apache.poi:poi-ooxml:$poiVer")
+
+    //csv
+    compile("net.sf.supercsv:super-csv-java8:2.4.0")
+
+    testCompile "junit:junit:4.11"
+}
+
+task createDirs {
+    sourceSets*.java.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+task wrapper(type:Wrapper){
+    gradleVersion = '4.6'
+}
