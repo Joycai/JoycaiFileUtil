@@ -2,6 +2,7 @@ import com.google.common.collect.Lists;
 import joycai.utils.csv.BeanReader;
 import joycai.utils.csv.CSVReader;
 import joycai.utils.csv.CSVWriter;
+import joycai.utils.file.JFileWriter;
 import org.junit.Test;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ParseInt;
@@ -18,6 +19,18 @@ import java.util.List;
 
 
 public class TestUtil {
+
+    @Test
+    public void testFileWriter() {
+
+        try {
+            JFileWriter.appendFile("testFile/test.txt").write("\"0545:12\",").close();
+            JFileWriter.appendFile("testFile/test.txt").write("\"0555:12\"").close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert true;
+    }
 
     @Test
     public void testWrite() {
@@ -40,8 +53,6 @@ public class TestUtil {
                     .addHeader(new String[]{"id", "电话", "信息"})
                     .writeFile(Lists.newArrayList(o1,o2),new String[]{"id","phone","info"});
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
         assert true;

@@ -1,23 +1,17 @@
 package joycai.utils.csv;
 
-import joycai.utils.common.TypeNameList;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.lang.reflect.Field;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class BeanWriter<T> {
 
-    private final ICsvBeanWriter csvWriter;
+    final ICsvBeanWriter csvWriter;
 
     final Class<T> clazz;
 
@@ -25,10 +19,20 @@ public class BeanWriter<T> {
     private CellProcessor[] cellProcessors;
 
 
-    public BeanWriter(final Writer writer, Class<T> clazz) throws IOException {
+    public BeanWriter(final Writer writer, Class<T> clazz) {
         csvWriter = new CsvBeanWriter(writer,
                 CsvPreference.STANDARD_PREFERENCE);
         this.clazz = clazz;
+
+        try {
+            writer.write('\uFEFF');
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public BeanWriter(final OutputStream out,Class<T> clazz){
+        this(new OutputStreamWriter(out, StandardCharsets.UTF_8), clazz);
     }
 
     public BeanWriter<T> addHeader(String[] header) {
@@ -47,7 +51,7 @@ public class BeanWriter<T> {
         return this;
     }
 
-    public void writeFile(List<T> dataList,String[] fieldsArray) throws NoSuchFieldException, IOException {
+    public void writeFile(List<T> dataList,String[] fieldsArray) throws IOException {
         if (null != header) {
             csvWriter.writeHeader(header);
         }
