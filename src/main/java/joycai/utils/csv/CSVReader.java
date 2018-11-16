@@ -8,4 +8,7 @@ public class CSVReader {
         return new BeanReader(reader, clazz);
     }
 
+    public static BeanReader newBeanReader(byte[] bytes,Class clazz){
+        return new BeanReader(bytes, clazz);
+    }
 }
