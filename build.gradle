@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        poiVer = '3.17'
+        poiVer = '4.0.0'
         guavaVersion = '27.0-jre'
         jacksonVersion = '2.9.7'
         slf4jVersion = '1.7.25'
@@ -15,7 +15,7 @@ buildscript {
 }
 
 group 'joycai'
-version '0.0.4'
+version '0.0.5'
 
 apply plugin: 'idea'
 apply plugin: 'java'
