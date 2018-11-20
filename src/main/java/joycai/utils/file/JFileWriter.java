@@ -19,6 +19,7 @@ public class JFileWriter {
         return new JFileWriter(new File(path), true);
     }
 
+
     public JFileWriter write(String content) throws IOException {
 
         if (null != fw) {

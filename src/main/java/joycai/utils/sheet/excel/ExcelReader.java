@@ -14,9 +14,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
-public class ExcelWorker<T> {
+public class ExcelReader {
 
     Workbook workbook;
 
@@ -27,7 +26,7 @@ public class ExcelWorker<T> {
      * @throws OLE2NotOfficeXmlFileException 代表你尝试用xlsx方式读取xls
      * @throws IOException
      */
-    public ExcelWorker(final InputStream ins, FILE_TYPE type) throws OfficeXmlFileException, OLE2NotOfficeXmlFileException, IOException {
+    public ExcelReader(final InputStream ins, ExcelType type) throws OfficeXmlFileException, OLE2NotOfficeXmlFileException, IOException {
         switch (type) {
             case XLS:
                 workbook = new HSSFWorkbook(ins);
@@ -87,9 +86,9 @@ public class ExcelWorker<T> {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public T readLineToObject(final Integer sheetIdx, final Integer rowIdx, String[] fieldMapper, Class<T> clazz) throws IllegalAccessException, InstantiationException {
+    public Object readLineToObject(final Integer sheetIdx, final Integer rowIdx, String[] fieldMapper, Class clazz) throws IllegalAccessException, InstantiationException {
         List<String> rowData = readLineWithString(sheetIdx, rowIdx);
-        T obj = clazz.newInstance();
+        Object obj = clazz.newInstance();
 
         if (fieldMapper.length == 0 || fieldMapper.length > rowData.size()) {
             return null;
@@ -113,7 +112,7 @@ public class ExcelWorker<T> {
     }
 
     /**
-     * 填充数据
+     * 为对象的制定字段填充数据
      *
      * @param field
      * @param obj
@@ -127,15 +126,27 @@ public class ExcelWorker<T> {
                     field.set(obj, value);
                     break;
                 case "java.lang.Boolean":
+                case "boolean":
                     field.set(obj, Boolean.valueOf(value));
                     break;
+
                 case "java.lang.Double":
+                case "double":
                     field.set(obj, Double.parseDouble(value));
                     break;
+
+                case "java.lang.Float":
+                case "float":
+                    field.set(obj, Float.parseFloat(value));
+                    break;
+
                 case "java.lang.Integer":
+                case "int":
                     field.set(obj, Integer.valueOf(value));
                     break;
+
                 default:
+                    break;
             }
         }catch (IllegalAccessException e){
             e.printStackTrace();
@@ -180,8 +191,12 @@ public class ExcelWorker<T> {
         }
     }
 
-    public enum FILE_TYPE {
-        XLS,
-        XLSX
+    public void close(){
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }

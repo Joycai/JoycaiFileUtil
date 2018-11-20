@@ -1,8 +1,8 @@
 package joycai.utils.csv;
 
-import joycai.utils.TestObj;
 import joycai.utils.sheet.csv.BeanReader;
 import joycai.utils.sheet.csv.CSVReader;
+import joycai.utils.sheet.model.TestObj;
 import org.junit.Test;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
