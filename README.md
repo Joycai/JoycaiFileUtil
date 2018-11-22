@@ -1,6 +1,8 @@
 # FileUtil
 utils for excel,csv,zip
 
+[Wiki](https://github.com/Joycai/FileUtil/wiki)
+
 ## 需要的依赖
 `compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'`  
 `compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'`  
@@ -15,5 +17,3 @@ utils for excel,csv,zip
 * XLS
 * XLSX
 * Zip
-
-[Wiki](https://github.com/Joycai/FileUtil/wiki)
