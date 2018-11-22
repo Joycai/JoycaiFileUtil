@@ -1,5 +1,6 @@
 buildscript {
     ext {
+        superCsvVersion = '2.4.0'
         poiVer = '4.0.0'
         guavaVersion = '27.0-jre'
         jacksonVersion = '2.9.7'
@@ -33,11 +34,11 @@ dependencies{
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
     compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     //poi
-    compile("org.apache.poi:poi:$poiVer")
-    compile("org.apache.poi:poi-ooxml:$poiVer")
+    compile group: 'org.apache.poi', name: 'poi', version: poiVer
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: poiVer
 
     //csv
-    compile("net.sf.supercsv:super-csv-java8:2.4.0")
+    compile group: 'net.sf.supercsv', name: 'super-csv-java8', version: superCsvVersion
 
     testCompile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
     testCompile "junit:junit:4.12"

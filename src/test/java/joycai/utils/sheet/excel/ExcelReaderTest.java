@@ -49,6 +49,11 @@ public class ExcelReaderTest {
                     TestObj.class,
                     new String[]{"date", "col2", "f1", "f2", "i1", "i2","bl1"},
                     new String[]{"日期", "", "浮点1", "浮点2", "整数1", "整数2"});
+            writer.writeSheet("testSheet2",
+                    Lists.newArrayList(testObj),
+                    TestObj.class,
+                    new String[]{"date", "col2", "f1", "f2", "i1", "i2","bl1"},
+                    new String[]{"日期", "", "浮点1", "浮点2", "整数1", "整数2"});
             byte[] byteArray = writer.exportExcel();
 
             JFileOutputUtil.newJFileOutputUtil("export.xlsx").writeAndClose(byteArray);
