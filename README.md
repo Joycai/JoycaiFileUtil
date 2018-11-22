@@ -6,3 +6,5 @@ utils for excel,csv,zip
 * XLS
 * XLSX
 * Zip
+
+[Wiki](https://github.com/Joycai/FileUtil/wiki)

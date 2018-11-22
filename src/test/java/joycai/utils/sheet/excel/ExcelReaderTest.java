@@ -3,22 +3,35 @@ package joycai.utils.sheet.excel;
 import com.google.common.collect.Lists;
 import joycai.utils.file.JFileOutputUtil;
 import joycai.utils.sheet.model.TestObj;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 
 public class ExcelReaderTest {
 
+    final static String path = "output";
+
+    @Before
+    public void createDir(){
+        File dic = new File(path);
+        if (!dic.exists()) {
+            dic.mkdir();
+        }
+    }
+
     @Test
     public void testRead() {
         try {
-            ExcelReader worker = new ExcelReader(new FileInputStream("test.xlsx"), ExcelType.XLSX);
+            ExcelReader reader = new ExcelReader(new FileInputStream(path+"/test.xlsx"), ExcelType.XLSX);
 
-            System.out.println(worker.firstLineIdx(0));
+            System.out.println(reader.firstLineIdx(0));
 
-            TestObj obj = (TestObj) worker.readLineToObject(0, 4, new String[]{"col2","", "col1"}, TestObj.class);
+            TestObj obj = (TestObj) reader.readLineToObject(0, 4, new String[]{"col2", "", "col1"}, TestObj.class);
+            reader.close();
             System.out.println(obj.toString());
             assert true;
         } catch (IOException e) {
@@ -56,7 +69,7 @@ public class ExcelReaderTest {
                     new String[]{"日期", "", "浮点1", "浮点2", "整数1", "整数2"});
             byte[] byteArray = writer.exportExcel();
 
-            JFileOutputUtil.newJFileOutputUtil("export.xlsx").writeAndClose(byteArray);
+            JFileOutputUtil.newJFileOutputUtil(path + "/export.xlsx").writeAndClose(byteArray);
 
         } catch (IOException e) {
             e.printStackTrace();
