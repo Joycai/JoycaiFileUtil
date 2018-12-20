@@ -19,6 +19,7 @@ public class BeanReader<T> {
 
     Boolean printInfo = false;
     Boolean closeStream = true;
+    Boolean checkMessy = false;
 
     final static String[] CHARSET_LIST = {"UTF-8", "GBK"};
 
@@ -95,7 +96,14 @@ public class BeanReader<T> {
             InputStreamReader br = new InputStreamReader(ins, Charset.forName(charsetName));
             CsvBeanReader reader = new CsvBeanReader(br, CsvPreference.STANDARD_PREFERENCE);
             String[] headers=reader.getHeader(true);
-            if(!containsMessy(headers)){
+
+            if(checkMessy){
+                if(!containsMessy(headers)){
+                    beanReader = reader;
+                    headerArray = headers;
+                    break;
+                }
+            }else {
                 beanReader = reader;
                 headerArray = headers;
                 break;
