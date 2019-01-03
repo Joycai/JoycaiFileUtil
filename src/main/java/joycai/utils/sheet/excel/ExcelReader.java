@@ -56,6 +56,11 @@ public class ExcelReader {
         return resultData;
     }
 
+    public int getLineCount(final Integer sheetIdx){
+        Sheet sheet = workbook.getSheetAt(sheetIdx);
+        return sheet.getLastRowNum();
+    }
+
     /**
      * 寻找一个不为空的行
      *
