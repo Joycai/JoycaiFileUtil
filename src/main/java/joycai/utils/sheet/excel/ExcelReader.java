@@ -11,9 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ExcelReader {
 
@@ -56,7 +54,7 @@ public class ExcelReader {
         return resultData;
     }
 
-    public int getLineCount(final Integer sheetIdx){
+    public int getLineCount(final Integer sheetIdx) {
         Sheet sheet = workbook.getSheetAt(sheetIdx);
         return sheet.getLastRowNum();
     }
@@ -67,13 +65,13 @@ public class ExcelReader {
      * @param sheetIdx
      * @return 0 开始，-1 没有数据
      */
-    public int firstLineIdx(final Integer sheetIdx){
+    public int firstLineIdx(final Integer sheetIdx) {
         Sheet sheet = workbook.getSheetAt(sheetIdx);
         for (Iterator<Row> rowItr = sheet.rowIterator(); rowItr.hasNext(); ) {
             Row row = rowItr.next();
             if (row.getPhysicalNumberOfCells() > 0) {
                 List<String> rowData = readRowAsString(row);
-                if(!emptyRow(rowData)){
+                if (!emptyRow(rowData)) {
                     return row.getRowNum();
                 }
             }
@@ -82,7 +80,6 @@ public class ExcelReader {
     }
 
     /**
-     *
      * @param sheetIdx
      * @param rowIdx
      * @param fieldMapper ""代表忽略这一列
@@ -123,7 +120,7 @@ public class ExcelReader {
      * @param obj
      * @param value
      */
-    private void fillData(Field field, Object obj, String value){
+    private void fillData(Field field, Object obj, String value) {
         field.setAccessible(true);
         try {
             switch (field.getType().getTypeName()) {
@@ -132,33 +129,41 @@ public class ExcelReader {
                     break;
                 case "java.lang.Boolean":
                 case "boolean":
-                    field.set(obj, Boolean.valueOf(value));
+                    if(!value.isEmpty()){
+                        field.set(obj, Boolean.valueOf(value));
+                    }
                     break;
 
                 case "java.lang.Double":
                 case "double":
-                    field.set(obj, Double.parseDouble(value));
+                    if(!value.isEmpty()){
+                        field.set(obj, Double.parseDouble(value));
+                    }
                     break;
 
                 case "java.lang.Float":
                 case "float":
-                    field.set(obj, Float.parseFloat(value));
+                    if(!value.isEmpty()){
+                        field.set(obj, Float.parseFloat(value));
+                    }
                     break;
 
                 case "java.lang.Integer":
                 case "int":
-                    field.set(obj, Integer.valueOf(value));
+                    if(!value.isEmpty()){
+                        field.set(obj, Integer.valueOf(value));
+                    }
                     break;
 
                 default:
                     break;
             }
-        }catch (IllegalAccessException e){
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
-    private boolean emptyRow(List<String> rowData){
+    private boolean emptyRow(List<String> rowData) {
         long emptyDataNum = rowData.stream().filter(s ->
                 Strings.isNullOrEmpty(s)
         ).count();
@@ -166,17 +171,34 @@ public class ExcelReader {
         return emptyDataNum == rowData.size();
     }
 
-    private List<String> readRowAsString(Row row){
+    private List<String> readRowAsString(Row row) {
         List<String> resultData = new ArrayList<String>();
-        row.forEach(cell -> {
-            String cellValue = readCell(cell,cell.getCellType());
 
-            if (!Strings.isNullOrEmpty(cellValue)) {
-                resultData.add(cellValue);
-            } else {
-                resultData.add("");
-            }
+        Map<Integer, Cell> nonullCell = new HashMap<Integer, Cell>();
+
+        row.forEach(cell -> {
+            //加入有效的cell
+            nonullCell.put(cell.getColumnIndex(), cell);
         });
+
+        if (!nonullCell.isEmpty()) {
+            int max = nonullCell.keySet().stream().mapToInt(value -> value).max().getAsInt();
+
+            for (int idx = 0; idx <= max; idx++) {
+                if (nonullCell.containsKey(idx)) {
+                    Cell cell = nonullCell.get(idx);
+                    String value = readCell(cell, cell.getCellType());
+                    if(value ==null || value.isEmpty()){
+                        resultData.add("");
+                    }else {
+                        resultData.add(value);
+                    }
+                } else {
+                    resultData.add("");
+                }
+            }
+        }
+
         return resultData;
     }
 
@@ -196,7 +218,7 @@ public class ExcelReader {
         }
     }
 
-    public void close(){
+    public void close() {
         try {
             workbook.close();
         } catch (IOException e) {

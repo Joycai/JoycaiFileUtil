@@ -30,13 +30,13 @@ public class ExcelReaderTest {
 
             System.out.println(reader.firstLineIdx(0));
 
-            TestObj obj = (TestObj) reader.readLineToObject(0, 4, new String[]{"col2", "", "col1"}, TestObj.class);
+            TestObj obj = (TestObj) reader.readLineToObject(0, 5, new String[]{"col2", "i1", "col1"}, TestObj.class);
+//            System.out.println(reader.readLineWithString(0,5));
+            System.out.println(obj);
             reader.close();
-            System.out.println(obj.toString());
             assert true;
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+            e.printStackTrace();} catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
