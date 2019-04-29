@@ -92,8 +92,16 @@ public class ExcelReader {
         List<String> rowData = readLineWithString(sheetIdx, rowIdx);
         Object obj = clazz.newInstance();
 
-        if (fieldMapper.length == 0 || fieldMapper.length > rowData.size()) {
+        if (fieldMapper.length == 0) {
             return null;
+        }
+
+        //如果映射表大于数据字段，补null
+        if(fieldMapper.length > rowData.size()){
+            int count = fieldMapper.length - rowData.size();
+            for (int i = 0; i < count; i++) {
+                rowData.add("");
+            }
         }
 
         int dataSize = rowData.size();
