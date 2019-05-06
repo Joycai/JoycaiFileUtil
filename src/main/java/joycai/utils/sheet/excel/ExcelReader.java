@@ -80,6 +80,9 @@ public class ExcelReader {
     }
 
     /**
+     *
+     * 读取行数据
+     *
      * @param sheetIdx
      * @param rowIdx
      * @param fieldMapper ""代表忽略这一列
@@ -96,7 +99,8 @@ public class ExcelReader {
             return null;
         }
 
-        //如果映射表大于数据字段，补null
+        //patch:处理空单元格结尾的问题
+        //如果映射表大于数据字段，补齐空字符
         if(fieldMapper.length > rowData.size()){
             int count = fieldMapper.length - rowData.size();
             for (int i = 0; i < count; i++) {
@@ -179,22 +183,28 @@ public class ExcelReader {
         return emptyDataNum == rowData.size();
     }
 
+    /**
+     * 将行数据读取成字符数组
+     *
+     * @param row
+     * @return
+     */
     private List<String> readRowAsString(Row row) {
         List<String> resultData = new ArrayList<String>();
 
-        Map<Integer, Cell> nonullCell = new HashMap<Integer, Cell>();
+        Map<Integer, Cell> nonullCellMap = new HashMap<Integer, Cell>();
 
         row.forEach(cell -> {
             //加入有效的cell
-            nonullCell.put(cell.getColumnIndex(), cell);
+            nonullCellMap.put(cell.getColumnIndex(), cell);
         });
 
-        if (!nonullCell.isEmpty()) {
-            int max = nonullCell.keySet().stream().mapToInt(value -> value).max().getAsInt();
+        if (!nonullCellMap.isEmpty()) {
+            int max = nonullCellMap.keySet().stream().mapToInt(value -> value).max().getAsInt();
 
             for (int idx = 0; idx <= max; idx++) {
-                if (nonullCell.containsKey(idx)) {
-                    Cell cell = nonullCell.get(idx);
+                if (nonullCellMap.containsKey(idx)) {
+                    Cell cell = nonullCellMap.get(idx);
                     String value = readCell(cell, cell.getCellType());
                     if(value ==null || value.isEmpty()){
                         resultData.add("");

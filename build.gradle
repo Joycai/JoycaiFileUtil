@@ -1,5 +1,6 @@
 buildscript {
     ext {
+        javaVersion = 1.8
         superCsvVersion = '2.4.0'
         poiVer = '4.0.0'
         guavaVersion = '27.0-jre'
@@ -16,12 +17,14 @@ buildscript {
 }
 
 plugins{
-    id 'java'
+    id 'java-library'
     id 'idea'
 }
 
 group 'joycai'
 version '1.0.1'
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
 
 jar {
     archivesBaseName = 'FileUtil'
@@ -32,18 +35,18 @@ repositories {
 }
 
 dependencies{
-    compile group: 'com.google.guava', name: 'guava', version: guavaVersion
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
-    compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+    api group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
     //poi
-    compile group: 'org.apache.poi', name: 'poi', version: poiVer
-    compile group: 'org.apache.poi', name: 'poi-ooxml', version: poiVer
+    implementation group: 'org.apache.poi', name: 'poi', version: poiVer
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poiVer
 
     //csv
-    compile group: 'net.sf.supercsv', name: 'super-csv-java8', version: superCsvVersion
+    implementation group: 'net.sf.supercsv', name: 'super-csv-java8', version: superCsvVersion
 
-    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
-    testCompile "junit:junit:4.12"
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
+    testImplementation "junit:junit:4.12"
 }
 
 tasks.withType(JavaCompile) {
