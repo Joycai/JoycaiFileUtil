@@ -142,6 +142,16 @@ public class ExcelWrite {
                         cell.setCellValue(field.getInt(data));
                         break;
 
+                    case "long":
+                        cell.setCellType(CellType.NUMERIC);
+                        cell.setCellValue(field.getLong(data));
+                        break;
+
+                    case "java.lang.Long":
+                        cell.setCellType(CellType.NUMERIC);
+                        cell.setCellValue((Long) field.get(data));
+                        break;
+
                     case "java.util.Date":
                         cell.setCellStyle(getDateStyle("yyyy/MM/dd hh:mm"));
                         cell.setCellValue((Date) field.get(data));
