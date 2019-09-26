@@ -22,7 +22,7 @@ public class ExcelWrite {
     final String postfix;
 
     /**
-     * @param type
+     * @param type 指定文件类型
      * @throws OfficeXmlFileException        代表你尝试用xls方式读取xlsx
      * @throws OLE2NotOfficeXmlFileException 代表你尝试用xlsx方式读取xls
      * @throws IOException
@@ -102,53 +102,39 @@ public class ExcelWrite {
             if (field != null) {
                 switch (field.getType().getTypeName()) {
                     case "java.lang.String":
-                        cell.setCellType(CellType.STRING);
                         cell.setCellValue((String) field.get(data));
                         break;
-
                     case "java.lang.Boolean":
-                        cell.setCellType(CellType.BOOLEAN);
                         cell.setCellValue((Boolean) field.get(data));
                         break;
                     case "boolean":
-                        cell.setCellType(CellType.BOOLEAN);
                         cell.setCellValue(field.getBoolean(data));
                         break;
-
                     case "java.lang.Double":
-                        cell.setCellType(CellType.NUMERIC);
                         cell.setCellValue((Double) field.get(data));
                         break;
                     case "double":
-                        cell.setCellType(CellType.NUMERIC);
                         cell.setCellValue(field.getDouble(data));
                         break;
-
                     case "java.lang.Float":
-                        cell.setCellType(CellType.NUMERIC);
                         cell.setCellValue((Float) field.get(data));
                         break;
                     case "float":
-                        cell.setCellType(CellType.NUMERIC);
                         cell.setCellValue(field.getFloat(data));
                         break;
 
                     case "java.lang.Integer":
-                        cell.setCellType(CellType.NUMERIC);
                         cell.setCellValue((Integer) field.get(data));
                         break;
                     case "int":
-                        cell.setCellType(CellType.NUMERIC);
                         cell.setCellValue(field.getInt(data));
                         break;
 
                     case "long":
-                        cell.setCellType(CellType.NUMERIC);
                         cell.setCellValue(field.getLong(data));
                         break;
 
                     case "java.lang.Long":
-                        cell.setCellType(CellType.NUMERIC);
                         cell.setCellValue((Long) field.get(data));
                         break;
 
@@ -157,11 +143,11 @@ public class ExcelWrite {
                         cell.setCellValue((Date) field.get(data));
                         break;
                     default:
-                        cell.setCellType(CellType.BLANK);
+                        cell.setBlank();
                         break;
                 }
             } else {
-                cell.setCellType(CellType.BLANK);
+                cell.setBlank();
             }
             colIdx++;
         }

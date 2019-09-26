@@ -1,11 +1,11 @@
 buildscript {
     ext {
         superCsvVersion = '2.4.0'
-        poiVer = '4.0.0'
-        guavaVersion = '27.0-jre'
-        jacksonVersion = '2.9.7'
-        slf4jVersion = '1.7.26'
-        logbackVersion = '1.1.11'
+        poiVer = '4.1.0'
+        guavaVersion = '27.1-jre'
+        jacksonVersion = '2.9.10'
+        slf4jVersion = '1.7.28'
+        logbackVersion = '1.2.3'
     }
     repositories {
         mavenCentral()
@@ -25,12 +25,13 @@ version '1.0.2'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-jar {
-    archivesBaseName = 'FileUtil'
-}
+//jar {
+//    archivesBaseName = 'joycaifileutil'
+//}
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies{
