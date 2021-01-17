@@ -1,22 +1,29 @@
 package joycai.utils.sheet.csv;
 
 import com.google.common.collect.Lists;
-import joycai.utils.sheet.csv.BeanReader;
-import joycai.utils.sheet.csv.CSVReader;
 import joycai.utils.sheet.model.TestObj;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.List;
 
-public class CSVReaderTest {
+class CSVReaderTest {
 
-    @Before
-    public void createDir(){
+    private static final Logger logger = LoggerFactory.getLogger(CSVReaderTest.class);
+
+    @BeforeEach
+    void createDir() {
         File dic = new File("output");
         if (!dic.exists()) {
             dic.mkdir();
@@ -24,11 +31,12 @@ public class CSVReaderTest {
     }
 
     @Test
-    public void readCSV() {
-        try {
+    @Disabled
+    void readCSV() {
+        Assertions.assertDoesNotThrow(() -> {
             FileInputStream inputStream = new FileInputStream("test.csv");
 
-            BeanReader reader = CSVReader.newBeanReader(inputStream, TestObj.class)
+            BeanReader<TestObj> reader = CSVReader.<TestObj>newBeanReader(inputStream, TestObj.class)
                     .setHeaderMap(headrs -> headrs)
                     .setCellProcessor(new CellProcessor[]{
                             new Optional(),
@@ -37,19 +45,14 @@ public class CSVReaderTest {
 
             List<TestObj> result = reader.readCSV();
             result.forEach(it -> {
-                System.out.println(it.getCol1() + " " + it.getCol2());
+                logger.debug("{} {}", it.getCol1(), it.getCol2());
             });
-            assert true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     @Test
-    public void writeCSV(){
-        try {
+    void writeCSV() {
+        Assertions.assertDoesNotThrow(() -> {
             TestObj testObj = new TestObj();
             testObj.setCol1("ttt");
             testObj.setCol2("tvvt");
@@ -61,17 +64,12 @@ public class CSVReaderTest {
             testObj.setBl1(false);
             FileOutputStream outputStream = new FileOutputStream(new File("output/out.csv"));
             CSVWriter.newBeanWriter(new OutputStreamWriter(outputStream), TestObj.class)
-                    .addHeader(new String[]{"列1","列2"})
+                    .addHeader(new String[]{"列1", "列2"})
                     .setCellProcessor(new CellProcessor[]{
                             new Optional(),
                             new Optional()
                     })
-                    .writeFile(Lists.newArrayList(testObj),new String[]{"col1","col2"});
-            assert true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    .writeFile(Lists.newArrayList(testObj), new String[]{"col1", "col2"});
+        });
     }
 }

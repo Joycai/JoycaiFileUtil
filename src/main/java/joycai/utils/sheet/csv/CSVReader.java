@@ -5,10 +5,11 @@ import java.io.InputStream;
 
 public class CSVReader {
 
-    public static BeanReader newBeanReader(final byte[] fileByte, Class clazz) throws IOException {
-        return new BeanReader(fileByte, clazz);
+    public static <T> BeanReader<T> newBeanReader(final byte[] fileByte, Class<T> clazz) throws IOException {
+        return new BeanReader<T>(fileByte, clazz);
     }
-    public static BeanReader newBeanReader(final InputStream ins, Class clazz) throws IOException {
-        return new BeanReader(ins, clazz);
+
+    public static <T> BeanReader<T> newBeanReader(final InputStream ins, Class<T> clazz) throws IOException {
+        return new BeanReader<T>(ins, clazz);
     }
 }

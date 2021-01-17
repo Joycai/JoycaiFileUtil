@@ -6,7 +6,7 @@ import java.io.Writer;
 
 public class CSVWriter {
 
-    public static BeanWriter newBeanWriter(final Writer writer, Class clazz) throws IOException {
-        return new BeanWriter(writer, clazz);
+    public static <T> BeanWriter<T> newBeanWriter(final Writer writer, Class<T> clazz) throws IOException {
+        return new BeanWriter<T>(writer, clazz);
     }
 }

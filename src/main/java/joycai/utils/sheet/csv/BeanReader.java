@@ -41,7 +41,7 @@ public class BeanReader<T> {
         this.clazz = clazz;
     }
 
-    private boolean containsMessy(String[] strs){
+    private boolean containsMessy(String[] strs) {
         boolean flag = false;
 
         for (String s : strs) {
@@ -54,7 +54,7 @@ public class BeanReader<T> {
         return flag;
     }
 
-    public BeanReader setPrintInfo(Boolean flag) {
+    public BeanReader<T> setPrintInfo(Boolean flag) {
         this.printInfo = flag;
         return this;
     }
@@ -65,7 +65,7 @@ public class BeanReader<T> {
      * @param headerMapper
      * @return
      */
-    public BeanReader setHeaderMap(ICSVHeaderMapper headerMapper) {
+    public BeanReader<T> setHeaderMap(ICSVHeaderMapper headerMapper) {
         this.headerMapper = headerMapper;
         return this;
     }
@@ -76,7 +76,7 @@ public class BeanReader<T> {
      * @param cellProcessors
      * @return
      */
-    public BeanReader setCellProcessor(CellProcessor[] cellProcessors) {
+    public BeanReader<T> setCellProcessor(CellProcessor[] cellProcessors) {
         this.cellProcessors = cellProcessors;
         return this;
     }
@@ -95,15 +95,15 @@ public class BeanReader<T> {
         for (String charsetName : CHARSET_LIST) {
             InputStreamReader br = new InputStreamReader(ins, Charset.forName(charsetName));
             CsvBeanReader reader = new CsvBeanReader(br, CsvPreference.STANDARD_PREFERENCE);
-            String[] headers=reader.getHeader(true);
+            String[] headers = reader.getHeader(true);
 
-            if(checkMessy){
-                if(!containsMessy(headers)){
+            if (checkMessy) {
+                if (!containsMessy(headers)) {
                     beanReader = reader;
                     headerArray = headers;
                     break;
                 }
-            }else {
+            } else {
                 beanReader = reader;
                 headerArray = headers;
                 break;
@@ -112,16 +112,16 @@ public class BeanReader<T> {
 
         List<T> resultList = new ArrayList<>();
 
-        if(null == beanReader){
+        if (null == beanReader) {
             throw new NullPointerException("no reader");
-        }else {
+        } else {
             T bean = null;
 
             while ((bean = beanReader.read(clazz, headerMapper.mapHeader(headerArray), cellProcessors)) != null) {
 
-                if(startIdx == 0 && endIdx==0){
+                if (startIdx == 0 && endIdx == 0) {
                     resultList.add(bean);
-                }else {
+                } else {
                     if (beanReader.getLineNumber() >= startIdx + 1 && beanReader.getLineNumber() <= endIdx + 1) {
                         resultList.add(bean);
                     }
@@ -135,7 +135,7 @@ public class BeanReader<T> {
                 beanReader.close();
             }
 
-            if(printInfo){
+            if (printInfo) {
                 System.out.println(resultList.size() + " rows read.");
             }
 

@@ -3,20 +3,22 @@ package joycai.utils.sheet.excel;
 import com.google.common.collect.Lists;
 import joycai.utils.file.JFileOutputUtil;
 import joycai.utils.sheet.model.TestObj;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 
-public class ExcelReaderTest {
+class ExcelReaderTest {
 
     final static String path = "output";
 
-    @Before
-    public void createDir(){
+    @BeforeEach
+    public void createDir() {
         File dic = new File(path);
         if (!dic.exists()) {
             dic.mkdir();
@@ -24,27 +26,20 @@ public class ExcelReaderTest {
     }
 
     @Test
-    public void testRead() {
-        try {
-            ExcelReader reader = new ExcelReader(new FileInputStream(path+"/test.xlsx"), ExcelType.XLSX);
-
+    @Disabled
+    void testRead() {
+        Assertions.assertDoesNotThrow(() -> {
+            ExcelReader reader = new ExcelReader(new FileInputStream(path + "/test.xlsx"), ExcelType.XLSX);
             System.out.println(reader.firstLineIdx(0));
-
             TestObj obj = (TestObj) reader.readLineToObject(0, 5, new String[]{"col2", "i1", "col1"}, TestObj.class);
-//            System.out.println(reader.readLineWithString(0,5));
             System.out.println(obj);
             reader.close();
-            assert true;
-        } catch (IOException e) {
-            e.printStackTrace();} catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+        });
+
     }
 
     @Test
-    public void testWrite(){
+    void testWrite() {
 
         try {
             TestObj testObj = new TestObj();
@@ -60,12 +55,12 @@ public class ExcelReaderTest {
             writer.writeSheet("testSheet",
                     Lists.newArrayList(testObj),
                     TestObj.class,
-                    new String[]{"date", "col2", "f1", "f2", "i1", "i2","bl1"},
+                    new String[]{"date", "col2", "f1", "f2", "i1", "i2", "bl1"},
                     new String[]{"日期", "", "浮点1", "浮点2", "整数1", "整数2"});
             writer.writeSheet("testSheet2",
                     Lists.newArrayList(testObj),
                     TestObj.class,
-                    new String[]{"date", "col2", "f1", "f2", "i1", "i2","bl1"},
+                    new String[]{"date", "col2", "f1", "f2", "i1", "i2", "bl1"},
                     new String[]{"日期", "", "浮点1", "浮点2", "整数1", "整数2"});
             byte[] byteArray = writer.exportExcel();
 
