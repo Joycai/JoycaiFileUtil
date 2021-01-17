@@ -20,7 +20,6 @@ plugins {
     id 'idea'
     id 'jacoco'
     id "org.sonarqube" version "3.0"
-    id "org.scoverage" version "5.0.0"
 }
 
 group 'joycai'
