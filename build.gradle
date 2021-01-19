@@ -1,25 +1,17 @@
-buildscript {
-    ext {
-        superCsvVersion = '2.4.0'
-        poiVer = '4.1.2'
-        guavaVersion = '29.0-jre'
-        jacksonVersion = '2.10.+'
-        slf4jVersion = '1.7.28'
-        logbackVersion = '1.2.3'
-    }
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-}
-
 plugins {
     id 'java-library'
     id 'idea'
     id 'jacoco'
     id "org.sonarqube" version "3.0"
+}
+
+ext {
+    superCsvVersion = '2.4.0'
+    poiVer = '4.1.2'
+    guavaVersion = '29.0-jre'
+    jacksonVersion = '2.10.+'
+    slf4jVersion = '1.7.28'
+    logbackVersion = '1.2.3'
 }
 
 group 'joycai'
