@@ -39,6 +39,14 @@ repositories {
     jcenter()
 }
 
+sonarqube {
+    properties {
+        property "sonar.projectKey", "Joycai_JoycaiFileUtil"
+        property "sonar.organization", "joycai"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
+
 dependencies {
     api group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
