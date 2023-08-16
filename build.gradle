@@ -7,30 +7,35 @@ plugins {
 
 ext {
     superCsvVersion = '2.4.0'
-    poiVer = '4.1.2'
+    poiVer = '5.2.3'
     guavaVersion = '29.0-jre'
-    jacksonVersion = '2.10.+'
-    slf4jVersion = '1.7.28'
-    logbackVersion = '1.2.3'
+    jacksonVersion = '2.14.+'
+    slf4jVersion = '1.7.36'
+    logbackVersion = '1.2.12'
 }
 
 group 'joycai'
 version '1.0.3'
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-jacoco {
-    toolVersion = "0.8.4"
-}
-
 jacocoTestReport {
+    dependsOn test
     reports {
-        xml.enabled true
-        csv.enabled false
-        html.destination file("${buildDir}/jacocoHtml")
+        xml.required = true
+        csv.required = false
+        html.required = true
+    }
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it,
+                            exclude: [
+                                    "**/http/**",
+                                    "**/*DTO*",
+                                    "**/*Type*",
+                                    "**/*Entity*",
+                                    "**/*Repo*"])
+                })
+        )
     }
 }
 
@@ -67,16 +72,15 @@ dependencies {
     testImplementation('org.mockito:mockito-core:3.6.28')
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+tasks.withType(JavaCompile).tap {
+    configureEach {
+        options.encoding = 'UTF-8'
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set('sources')
-    from sourceSets.main.allSource
-}
-
-task createDirs {
+tasks.register( "createDirs") {
     sourceSets*.java.srcDirs*.each { it.mkdirs() }
     sourceSets*.resources.srcDirs*.each { it.mkdirs() }
 }
@@ -86,4 +90,5 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+    finalizedBy jacocoTestReport
 }
